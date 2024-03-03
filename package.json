@@ -1,0 +1,19 @@
+{
+  "name": "blogcraft",
+  "version": "1.0.0",
+  "description": "a complete blog paltform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/parameshwar-arroju/BlogCraft.git"
+  },
+  "author": "parameshwar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/parameshwar-arroju/BlogCraft/issues"
+  },
+  "homepage": "https://github.com/parameshwar-arroju/BlogCraft#readme"
+}
