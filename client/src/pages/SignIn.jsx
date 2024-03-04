@@ -13,9 +13,15 @@ export function SignIn() {
                 username,
                 password
             });
-            const token = response.data.token;
-            localStorage.setItem('token', token);
-            navigate('/');
+            if(response.status >= 200 && response.status < 300){
+                const token = response.data.token;
+                const author = response.data.username;
+                localStorage.setItem('token', token);
+                localStorage.setItem('author', author);
+                navigate('/');
+            } else {
+                console.log("Unexpected response status:", response.status);
+            }
         } catch (error) {
             console.log(error.response.data.message);
         }

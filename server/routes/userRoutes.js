@@ -31,17 +31,18 @@ userRoute.post("/signup",async (req, res) => {
 });
 
 userRoute.post("/signin",async (req, res) => {
+	const username = req.body.username;
   const userInfo = req.body;
   const valid = await User.findOne(userInfo);
   if(!valid)  res.status(404).json({message: "Username or Password is Incorrect"}); 
   else{
-	const token = jwt.sign({username: req.body.username}, jwtSecrect);
-	res.status(201).json({token: token});
+	const token = jwt.sign({username: username}, jwtSecrect);
+	res.status(201).json({token: token, username: username});
   }
 });
 
 userRoute.post("/signout", userAuth, (req, res) => {
-	res.cookie("token", '').status(200).json({message: "User signout sucessfull"});
+	res.status(200).json({message: "User signout sucessfull"});
 });
 
 userRoute.use((err, req, res, next) => {

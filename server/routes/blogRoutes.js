@@ -1,7 +1,7 @@
 import express from "express";
+import fs from "fs";
 import multer from "multer";
 import jwt from "jsonwebtoken";
-import cookieParser from "cookie-parser";
 import { Blog } from "../models/db.js";
 import userAuth from "../middlewares/userAuth.js";
 
@@ -17,8 +17,6 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-
-blogRoute.use(cookieParser());
 
 // Home route
 blogRoute.get("/all", async (req, res) => {
@@ -38,7 +36,7 @@ blogRoute.get("/:blogid", userAuth, async (req, res) => {
   res.status(201).json({ BlogList: BlogList });
 });
 
-blogRoute.post("/newblog", userAuth, upload.single("img"), async (req, res) => {
+blogRoute.post("/newblog", userAuth, upload.single("file"), async (req, res) => {
   const blogInfo = req.body;
   blogInfo.img = {
     filename: req.file.filename,
@@ -49,7 +47,11 @@ blogRoute.post("/newblog", userAuth, upload.single("img"), async (req, res) => {
   res.status(201).json({ message: "Blog created sucessfully" });
 });
 
-blogRoute.patch("/:blogid", userAuth, upload.single("img"), async (req, res) => {
+blogRoute.patch(
+  "/:blogid",
+  userAuth,
+  upload.single("file"),
+  async (req, res) => {
     const blogid = req.params.blogid;
     const currentBlog = await Blog.findOneAndUpdate(
       {
@@ -68,10 +70,18 @@ blogRoute.patch("/:blogid", userAuth, upload.single("img"), async (req, res) => 
           content: req.body.content || currentBlog.content,
         },
       },
-      { new: true }
+      { new: false }
     );
     if (!currentBlog) res.status(400).json({ message: "Cannot accecss it" });
-    else res.status(201).json({ message: "Blog Updated sucessfully" });
+    else {
+      try {
+        fs.copyFileSync(req.file.path, currentBlog.img.path);
+        fs.unlinkSync(currentBlog.img.path);
+      } catch (error) {
+        console.log(error);
+      }
+      res.status(201).json({ message: "Blog Updated sucessfully" });
+    }
   }
 );
 
@@ -82,13 +92,20 @@ blogRoute.delete("/:blogid", userAuth, async (req, res) => {
     author: req.username,
   });
   if (!currentBlog) res.status(400).json({ message: "Cannot accecss it" });
-  else res.status(200).json({ message: "Blog deleted sucessfully" });
+  else {
+    try {
+      fs.unlinkSync(currentBlog.img.path);
+      res.status(200).json({ message: "Blog deleted sucessfully" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 });
 
 blogRoute.use((err, req, res, next) => {
-	res.status(500).json({error: err});
-	next();
-})
+  res.status(500).json({ error: err });
+  next();
+});
 
 blogRoute.all("*", (req, res) => {
   res.status(404).json({ message: "Route Not Found" });

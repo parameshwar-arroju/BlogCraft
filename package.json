@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/parameshwar-arroju/BlogCraft/issues"
   },
-  "homepage": "https://github.com/parameshwar-arroju/BlogCraft#readme"
+  "homepage": "https://github.com/parameshwar-arroju/BlogCraft#readme",
+  "dependencies": {
+    "axios": "^1.6.7"
+  }
 }
