@@ -56,7 +56,7 @@ npm install
 npm start
 ```
 
-2. Open your web browser and visit http://localhost:3000 to view the website.
+2. Open your web browser and visit https://blogcraft.onrender.com to view the website.
 
 ## Contributing
 

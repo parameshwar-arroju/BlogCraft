@@ -9,11 +9,11 @@ export function SignIn() {
     async function HandleSubmit(e) {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/users/signin', {
+            const response = await axios.post('https://blogcraft.onrender.com/users/signin', {
                 username,
                 password
             });
-            if(response.status >= 200 && response.status < 300){
+            if (response.status >= 200 && response.status < 300) {
                 const token = response.data.token;
                 const author = response.data.username;
                 localStorage.setItem('token', token);

@@ -14,7 +14,7 @@ export function BlogId() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/blogs/' + id, {
+                const response = await axios.get('https://blogcraft.onrender.com/blogs/' + id, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -32,7 +32,7 @@ export function BlogId() {
     }
     async function HandleDelete() {
         try {
-            const responce = axios.delete('http://localhost:3000/blogs/' + id, {
+            const responce = axios.delete('https://blogcraft.onrender.com/blogs/' + id, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -51,6 +51,6 @@ export function BlogId() {
             </div>)
             : (<></>)
         }
-        <Blog blogs={blog} mode={editMode}/>
+        <Blog blogs={blog} mode={editMode} />
     </>)
 }

@@ -18,7 +18,7 @@ export function CreateBlog() {
         data.set('file', files[0]);
         ev.preventDefault();
         const token = localStorage.getItem('token');
-        const response = await axios.post('http://localhost:3000/blogs/newblog', data, {
+        const response = await axios.post('https://blogcraft.onrender.com/blogs/newblog', data, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -36,14 +36,14 @@ export function CreateBlog() {
                 <input type="title"
                     placeholder={'Title'}
                     value={title}
-                    onChange={ev => setTitle(ev.target.value)} required/>
+                    onChange={ev => setTitle(ev.target.value)} required />
                 <input type="description"
                     placeholder={'description'}
                     value={description}
-                    onChange={ev => setDescription(ev.target.value)} required/>
+                    onChange={ev => setDescription(ev.target.value)} required />
                 <input type="file"
-                    onChange={ev => setFiles(ev.target.files)} required/>
-                <Editor value={content} onChange={setContent} required/>
+                    onChange={ev => setFiles(ev.target.files)} required />
+                <Editor value={content} onChange={setContent} required />
                 <button className='btn btn-outline-dark'>Create post</button>
             </form>
         </div>

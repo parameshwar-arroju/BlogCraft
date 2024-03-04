@@ -14,7 +14,7 @@ export function EditBlog() {
     const token = localStorage.getItem('token');
 
     useEffect(() => {
-        axios.get('http://localhost:3000/blogs/' + id, {
+        axios.get('https://blogcraft.onrender.com/blogs/' + id, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -35,7 +35,7 @@ export function EditBlog() {
         if (files?.[0]) {
             data.set('file', files?.[0]);
         }
-        const response = await axios.patch('http://localhost:3000/blogs/' + id, data, {
+        const response = await axios.patch('https://blogcraft.onrender.com/blogs/' + id, data, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -55,14 +55,14 @@ export function EditBlog() {
                 <input type="title"
                     placeholder={'Title'}
                     value={title}
-                    onChange={ev => setTitle(ev.target.value)} required/>
+                    onChange={ev => setTitle(ev.target.value)} required />
                 <input type="description"
                     placeholder={'description'}
                     value={description}
-                    onChange={ev => setDescription(ev.target.value)} required/>
+                    onChange={ev => setDescription(ev.target.value)} required />
                 <input type="file"
-                    onChange={ev => setFiles(ev.target.files)} required/>
-                <Editor onChange={setContent} value={content} required/>
+                    onChange={ev => setFiles(ev.target.files)} required />
+                <Editor onChange={setContent} value={content} required />
                 <button style={{ marginTop: '5px' }}>Update post</button>
             </form>
         </div>

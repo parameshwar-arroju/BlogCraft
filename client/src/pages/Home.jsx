@@ -8,7 +8,7 @@ export function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/blogs/all');
+                const response = await axios.get('https://blogcraft.onrender.com/blogs/all');
                 setBlogs(response.data.BlogList);
             } catch (error) {
                 console.error('Error fetching blogs:', error);
@@ -17,6 +17,6 @@ export function Home() {
         fetchData();
     }, []);
     return (
-        <Blog blogs={blogs} mode={editMode}/>
+        <Blog blogs={blogs} mode={editMode} />
     );
 }
