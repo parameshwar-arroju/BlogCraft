@@ -1,8 +1,9 @@
 import './blog.css'
 import { useNavigate } from 'react-router-dom';
-export function Blog({ blogs }) {
+export function Blog({ blogs, mode }) {
     const navigate = useNavigate();
     function HandleClick (id) {
+        if(mode)
         navigate(`/blogid/${id}`);
     }
     return (<>
@@ -11,7 +12,7 @@ export function Blog({ blogs }) {
                 blogs.map(blog => (
                     <div key={blog._id} className='blog-outer border border-3'  onClick={() => HandleClick(blog._id)}>
                         <img src={'http://localhost:3000/' + blog.img.path} alt={blog.title} className='blog-cover image-fluid ' />
-                        <h2>{blog.title}</h2>
+                        <h2 className=''>{blog.title}</h2>
                         <p>{blog.description}</p>
                         {/* <p>{blog.content}</p> */}
                         <div dangerouslySetInnerHTML={{ __html: blog.content }} />
@@ -20,7 +21,7 @@ export function Blog({ blogs }) {
                     </div>
                 ))
             ) : (
-                <p>Loading...</p>
+                <p>Loading...</p> 
             )}
         </div>
     </>)

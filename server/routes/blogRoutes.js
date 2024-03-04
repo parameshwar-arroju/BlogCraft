@@ -20,95 +20,127 @@ const upload = multer({ storage: storage });
 
 // Home route
 blogRoute.get("/all", async (req, res) => {
-  const BlogList = await Blog.find({});
-  res.status(201).json({ BlogList: BlogList });
+  try {
+    const BlogList = await Blog.find({}).sort({ date: "desc" });
+    res.status(200).json({ BlogList: BlogList });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 blogRoute.get("/myblogs", userAuth, async (req, res) => {
-  const username = req.username;
-  const BlogList = await Blog.find({ author: username });
-  res.status(201).json({ BlogList: BlogList });
+  try {
+    const username = req.username;
+    const BlogList = await Blog.find({ author: username }).sort({
+      date: "desc",
+    });
+    res.status(200).json({ BlogList: BlogList });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 blogRoute.get("/:blogid", userAuth, async (req, res) => {
-  const blogid = req.params.blogid;
-  const BlogList = await Blog.find({ _id: blogid });
-  res.status(201).json({ BlogList: BlogList });
+  try {
+    const blogid = req.params.blogid;
+    const BlogList = await Blog.find({ _id: blogid });
+    res.status(200).json({ BlogList: BlogList });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
-blogRoute.post("/newblog", userAuth, upload.single("file"), async (req, res) => {
-  const blogInfo = req.body;
-  blogInfo.img = {
-    filename: req.file.filename,
-    path: req.file.path,
-  };
-  blogInfo.author = req.username;
-  await Blog.create(blogInfo);
-  res.status(201).json({ message: "Blog created sucessfully" });
-});
+blogRoute.post(
+  "/newblog",
+  userAuth,
+  upload.single("file"),
+  async (req, res) => {
+    try {
+      const blogInfo = req.body;
+      blogInfo.img = {
+        filename: req.file.filename,
+        path: req.file.path,
+      };
+      blogInfo.author = req.username;
+      await Blog.create(blogInfo);
+      res.status(201).json({ message: "Blog created successfully" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+);
 
 blogRoute.patch(
   "/:blogid",
   userAuth,
   upload.single("file"),
   async (req, res) => {
-    const blogid = req.params.blogid;
-    const currentBlog = await Blog.findOneAndUpdate(
-      {
-        _id: blogid,
-        author: req.username,
-      },
-      {
-        $set: {
+    try {
+      const blogid = req.params.blogid;
+      const currentBlog = await Blog.findOneAndUpdate(
+        {
           _id: blogid,
-          img: {
-            filename: req.file.filename || currentBlog.img.filename,
-            path: req.file.path || currentBlog.img.path,
-          },
-          title: req.body.title || currentBlog.title,
-          description: req.body.description || currentBlog.description,
-          content: req.body.content || currentBlog.content,
+          author: req.username,
         },
-      },
-      { new: false }
-    );
-    if (!currentBlog) res.status(400).json({ message: "Cannot accecss it" });
-    else {
-      try {
-        fs.copyFileSync(req.file.path, currentBlog.img.path);
-        fs.unlinkSync(currentBlog.img.path);
-      } catch (error) {
-        console.log(error);
+        {
+          $set: {
+            _id: blogid,
+            img: {
+              filename: req.file.filename || currentBlog.img.filename,
+              path: req.file.path || currentBlog.img.path,
+            },
+            title: req.body.title || currentBlog.title,
+            description: req.body.description || currentBlog.description,
+            content: req.body.content || currentBlog.content,
+          },
+        },
+        { new: false }
+      );
+      if (!currentBlog) {
+        res.status(400).json({ message: "Cannot access it" });
+      } else {
+        try {
+          fs.copyFileSync(req.file.path, currentBlog.img.path);
+          fs.unlinkSync(currentBlog.img.path);
+          res.status(200).json({ message: "Blog Updated successfully" });
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: "Internal Server Error" });
+        }
       }
-      res.status(201).json({ message: "Blog Updated sucessfully" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal Server Error" });
     }
   }
 );
 
 blogRoute.delete("/:blogid", userAuth, async (req, res) => {
-  const blogid = req.params.blogid;
-  const currentBlog = await Blog.findOneAndDelete({
-    _id: blogid,
-    author: req.username,
-  });
-  if (!currentBlog) res.status(400).json({ message: "Cannot accecss it" });
-  else {
-    try {
-      fs.unlinkSync(currentBlog.img.path);
-      res.status(200).json({ message: "Blog deleted sucessfully" });
-    } catch (error) {
-      console.log(error);
+  try {
+    const blogid = req.params.blogid;
+    const currentBlog = await Blog.findOneAndDelete({
+      _id: blogid,
+      author: req.username,
+    });
+    if (!currentBlog) {
+      res.status(400).json({ message: "Cannot access it" });
+    } else {
+      try {
+        fs.unlinkSync(currentBlog.img.path);
+        res.status(200).json({ message: "Blog deleted successfully" });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal Server Error" });
+      }
     }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-});
-
-blogRoute.use((err, req, res, next) => {
-  res.status(500).json({ error: err });
-  next();
-});
-
-blogRoute.all("*", (req, res) => {
-  res.status(404).json({ message: "Route Not Found" });
 });
 
 export default blogRoute;

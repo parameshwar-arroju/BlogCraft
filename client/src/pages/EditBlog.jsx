@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Editor } from "../components/Editor";
 import 'react-quill/dist/quill.snow.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import axios from "axios";
 export function EditBlog() {
@@ -46,23 +46,25 @@ export function EditBlog() {
     }
 
     if (redirect) {
-        return <Navigate to={'/blog/' + id} />
+        return <Navigate to={'/blogid/' + id} />
     }
 
     return (<>
-        <form onSubmit={updatePost}>
-            <input type="title"
-                placeholder={'Title'}
-                value={title}
-                onChange={ev => setTitle(ev.target.value)} />
-            <input type="description"
-                placeholder={'description'}
-                value={description}
-                onChange={ev => setDescription(ev.target.value)} />
-            <input type="file"
-                onChange={ev => setFiles(ev.target.files)} />
-            <Editor onChange={setContent} value={content} />
-            <button style={{ marginTop: '5px' }}>Update post</button>
-        </form>
+        <div className="container d-flex flex-column justify-content-center">
+            <form onSubmit={updatePost}>
+                <input type="title"
+                    placeholder={'Title'}
+                    value={title}
+                    onChange={ev => setTitle(ev.target.value)} required/>
+                <input type="description"
+                    placeholder={'description'}
+                    value={description}
+                    onChange={ev => setDescription(ev.target.value)} required/>
+                <input type="file"
+                    onChange={ev => setFiles(ev.target.files)} required/>
+                <Editor onChange={setContent} value={content} required/>
+                <button style={{ marginTop: '5px' }}>Update post</button>
+            </form>
+        </div>
     </>);
 };

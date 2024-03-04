@@ -36,14 +36,14 @@ export function CreateBlog() {
                 <input type="title"
                     placeholder={'Title'}
                     value={title}
-                    onChange={ev => setTitle(ev.target.value)} />
+                    onChange={ev => setTitle(ev.target.value)} required/>
                 <input type="description"
                     placeholder={'description'}
                     value={description}
-                    onChange={ev => setDescription(ev.target.value)} />
+                    onChange={ev => setDescription(ev.target.value)} required/>
                 <input type="file"
-                    onChange={ev => setFiles(ev.target.files)} />
-                <Editor value={content} onChange={setContent} />
+                    onChange={ev => setFiles(ev.target.files)} required/>
+                <Editor value={content} onChange={setContent} required/>
                 <button className='btn btn-outline-dark'>Create post</button>
             </form>
         </div>

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 export function BlogId() {
+    const editMode = false;
     const navigate = useNavigate();
     const author = localStorage.getItem('author');
     const [username, setUsername] = useState('');
@@ -50,6 +51,6 @@ export function BlogId() {
             </div>)
             : (<></>)
         }
-        <Blog blogs={blog} />
+        <Blog blogs={blog} mode={editMode}/>
     </>)
 }

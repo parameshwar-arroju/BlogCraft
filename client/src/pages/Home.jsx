@@ -4,7 +4,7 @@ import { Blog } from '../components/Blog';
 
 export function Home() {
     const [blogs, setBlogs] = useState([]);
-
+    const editMode = true;
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -17,6 +17,6 @@ export function Home() {
         fetchData();
     }, []);
     return (
-        <Blog blogs={blogs}/>
+        <Blog blogs={blogs} mode={editMode}/>
     );
 }

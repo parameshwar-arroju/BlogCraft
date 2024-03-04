@@ -3,16 +3,8 @@ import 'dotenv/config';
 
 mongoose.connect(process.env.MONGODB_URI);
 
-// const imageSchema = new mongoose.Schema({
-//     name: String,
-//     path: String
-// });
 
 const blogSchema = new mongoose.Schema({
-    // imageid: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Images'
-    // },
     img: {
         filename: String,
         path: String
@@ -43,7 +35,6 @@ const userSchema = new mongoose.Schema({
     password: String,
 });
 
-// const Image = mongoose.model('Images', blogSchema);
 const Blog = mongoose.model('Blogs', blogSchema);
 const User = mongoose.model('Users', userSchema);
 

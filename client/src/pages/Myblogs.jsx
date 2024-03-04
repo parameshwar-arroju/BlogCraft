@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Blog } from '../components/Blog';
 export function MyBlogs () {
     const [blogs, setBlogs] = useState([]);
-
+    const editMode = true;
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -22,6 +22,6 @@ export function MyBlogs () {
     }, []);
     return (
     <>
-        <Blog blogs={blogs}/>
+        <Blog blogs={blogs} mode={editMode}/>
     </>);
 };
