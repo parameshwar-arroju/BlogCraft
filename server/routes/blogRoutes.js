@@ -51,7 +51,7 @@ blogRoute.get("/myblogs", userAuth, async (req, res) => {
   }
 });
 
-blogRoute.get("/:blogid", userAuth, async (req, res) => {
+blogRoute.get("/:blogid", async (req, res) => {
   try {
     const blogid = req.params.blogid;
     const BlogList = await Blog.find({ _id: blogid });
