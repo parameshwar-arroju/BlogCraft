@@ -1,9 +1,18 @@
 import express from "express";
 import fs from "fs";
 import multer from "multer";
+import cloudinary from "cloudinary";
 import jwt from "jsonwebtoken";
 import { Blog } from "../models/db.js";
 import userAuth from "../middlewares/userAuth.js";
+import "dotenv/config";
+
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+  secure: true,
+});
 
 const blogRoute = express.Router();
 const storage = multer.diskStorage({
@@ -59,10 +68,15 @@ blogRoute.post(
   upload.single("file"),
   async (req, res) => {
     try {
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: "BlogCraft",
+      });
       const blogInfo = req.body;
       blogInfo.img = {
         filename: req.file.filename,
         path: req.file.path,
+        name: result.public_id,
+        url: result.secure_url
       };
       blogInfo.author = req.username;
       await Blog.create(blogInfo);
@@ -80,6 +94,9 @@ blogRoute.patch(
   upload.single("file"),
   async (req, res) => {
     try {
+      const result = await cloudinary.v2.uploader.upload(req.file.path, {
+        folder: "BlogCraft",
+      });
       const blogid = req.params.blogid;
       const currentBlog = await Blog.findOneAndUpdate(
         {
@@ -92,6 +109,8 @@ blogRoute.patch(
             img: {
               filename: req.file.filename || currentBlog.img.filename,
               path: req.file.path || currentBlog.img.path,
+              name: result.public_id || currentBlog.img.name,
+              url: result.secure_url || currentBlog.img.url
             },
             title: req.body.title || currentBlog.title,
             description: req.body.description || currentBlog.description,
@@ -104,6 +123,8 @@ blogRoute.patch(
         res.status(400).json({ message: "Cannot access it" });
       } else {
         try {
+          const result = await cloudinary.v2.api
+        .delete_resources(currentBlog.img.name);
           fs.copyFileSync(req.file.path, currentBlog.img.path);
           fs.unlinkSync(currentBlog.img.path);
           res.status(200).json({ message: "Blog Updated successfully" });
@@ -130,6 +151,8 @@ blogRoute.delete("/:blogid", userAuth, async (req, res) => {
       res.status(400).json({ message: "Cannot access it" });
     } else {
       try {
+        const result = await cloudinary.v2.api
+        .delete_resources(currentBlog.img.name);
         fs.unlinkSync(currentBlog.img.path);
         res.status(200).json({ message: "Blog deleted successfully" });
       } catch (error) {

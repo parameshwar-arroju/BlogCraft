@@ -7,7 +7,9 @@ mongoose.connect(process.env.MONGODB_URI);
 const blogSchema = new mongoose.Schema({
     img: {
         filename: String,
-        path: String
+        path: String,
+        name: String,
+        url: String
     },
     title: String,
     description: String,

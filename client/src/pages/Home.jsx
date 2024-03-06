@@ -17,6 +17,6 @@ export function Home() {
         fetchData();
     }, []);
     return (
-        <Blog blogs={blogs} mode={editMode} />
+        <Blog blogs={blogs} mode={editMode} page='home'/>
     );
 }
