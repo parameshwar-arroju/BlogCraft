@@ -12,17 +12,19 @@ export function Blog({ blogs, mode, page }) {
         <div className='container d-flex flex-column gap-5'>
             {blogs.length > 0 ? (
                 blogs.map(blog => (
-                    <div key={blog._id} className='blog-outer border border-3' onClick={() => HandleClick(blog._id)}>
-                        <img src={blog.img.url} alt={blog.title} className='blog-cover image-fluid ' />
-                        <h2 className=''>{blog.title}</h2>
+                    <div key={blog._id} className='blog-outer border-dark border-bottom'>
+                        <img src={blog.img.url} alt={blog.title} className='pointercursor blog-cover image-fluid' onClick={() => HandleClick(blog._id)}/>
+                        <h1 className=''>{blog.title}</h1>
                         <p>{blog.description}</p>
                         {page == 'home' ?
-                            <p>Read More</p>
+                            <p onClick={() => HandleClick(blog._id)}><a className="pointercursor btn btn-dark"><i>👉Read More</i></a></p>
                             :
                             <div dangerouslySetInnerHTML={{ __html: blog.content }} />
                         }
-                        <p>Author: {blog.author}</p>
-                        <p>Date: {new Date(blog.date).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                        <div className="d-md-flex flex-row-reverse">
+                            <p className='pe-5'>🙍<b>Author :</b> {blog.author}</p>
+                            <p className='me-auto'>📅<b>Date :</b> {new Date(blog.date).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                        </div>
                     </div>
                 ))
             ) : (

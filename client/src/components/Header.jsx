@@ -39,12 +39,12 @@ export function Header() {
                         {!IsAuth ?
                             (
                                 <>
-                                <Link key="signup" className="nav-link" to="/signin">SignUp</Link>
+                                <Link key="signup" className="nav-link" to="/signup">SignUp</Link>
                                 <Link key="signin" className="nav-link" to="/signin">SignIn</Link>
                                 </>
                             )
                             :
-                            (<Link key="signout" className="nav-link" onClick={HandleSignOut}>SignOut</Link>)
+                            (<Link key="signout" className="nav-link" to='/' onClick={HandleSignOut}>SignOut</Link>)
                         }
                         <Link className="btn  btn-outline-dark" to="https://github.com/parameshwar-arroju/BlogCraft" target="_blank">Github</Link>
                     </div>

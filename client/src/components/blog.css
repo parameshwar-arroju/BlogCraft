@@ -7,6 +7,9 @@
 .blog-outer{
     padding: 1rem;
 }
+.pointercursor{
+    cursor: pointer;
+}
 .loading{
     height: calc(100vh - 60px);
 }

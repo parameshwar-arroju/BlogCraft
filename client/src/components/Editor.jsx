@@ -10,7 +10,7 @@ export function Editor({ value, onChange }) {
                 { indent: '-1' },
                 { indent: '+1' },
             ],
-            ['link', 'image'],
+            ['link'],
             ['clean'],
         ],
     };
@@ -21,7 +21,7 @@ export function Editor({ value, onChange }) {
                 theme={'snow'}
                 onChange={onChange}
                 modules={modules} 
-                style={{height: '20rem', marginBottom: '3rem'}}/>
+                style={{height: '18rem', marginBottom: '3rem'}}/>
         </div>
     </>);
 }
