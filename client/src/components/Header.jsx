@@ -14,6 +14,7 @@ export function Header() {
     }, []);
     function HandleSignOut() {
         localStorage.removeItem('token');
+        localStorage.removeItem('author');
         setIsAuth(false);
         navigate('/');
     }

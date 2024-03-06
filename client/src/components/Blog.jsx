@@ -6,7 +6,7 @@ export function Blog({ blogs, mode, page }) {
     function HandleClick(id) {
         if (mode)
             navigate(`/blogid/${id}`);
-        if (!token) navigate('/signin');
+        // if (!token) navigate('/signin');
     }
     return (<>
         <div className='container d-flex flex-column gap-5'>
