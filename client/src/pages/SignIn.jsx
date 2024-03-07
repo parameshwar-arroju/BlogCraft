@@ -33,11 +33,11 @@ export function SignIn() {
                     <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
                     <div className="form-floating">
-                        <input type="text" className="form-control" id="floatingInput" placeholder="Username" autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                        <input type="text" className="form-control" id="floatingInput" placeholder="Username" autoComplete="username" value={username} onChange={(e) => setUsername(e.target.value)} required/>
                         <label htmlFor="floatingInput">Username</label>
                     </div>
                     <div className="form-floating">
-                        <input type="password" className="form-control" id="floatingPassword" placeholder="Password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+                        <input type="password" className="form-control" id="floatingPassword" placeholder="Password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} required/>
                         <label htmlFor="floatingPassword">Password</label>
                     </div>
 
