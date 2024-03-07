@@ -1,5 +1,6 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from 'bcrypt';
 import cookieParser from "cookie-parser";
 import { User } from "../models/db.js";
 import { z } from "zod";
@@ -30,18 +31,20 @@ userRoute.post("/signup", async (req, res) => {
   if (userExist) {
     return res.status(409).json({ message: "User already exists" });
   }
-
+  const hash = await bcrypt.hash(req.body.password, 13);
+  req.body.password = hash;
   await User.create(req.body);
   res.status(201).json({ message: "User created successfully" });
 });
 
 userRoute.post("/signin", async (req, res) => {
   const { username, password } = req.body;
-  const user = await User.findOne({ username, password });
-
+  const user = await User.findOne({ username });
   if (!user) {
     return res.status(401).json({ message: "Username or Password is Incorrect" });
   }
+  const match = await bcrypt.compare(password, user.password);
+  if(!match) return res.status(401).json({message: "Username or Password is Incorrect"});
 
   const token = jwt.sign({ username }, jwtSecret);
   res.cookie("token", token, { httpOnly: true });
